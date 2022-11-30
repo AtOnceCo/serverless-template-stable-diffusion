@@ -24,6 +24,7 @@ def inference(model_inputs:dict) -> dict:
 
     # Parse out your arguments
     prompt = model_inputs.get('prompt', None)
+    negative_prompt = model_inputs.get('negative_prompt', None)
     height = model_inputs.get('height', 768)
     width = model_inputs.get('width', 768)
     num_inference_steps = model_inputs.get('num_inference_steps', 50)
@@ -40,7 +41,7 @@ def inference(model_inputs:dict) -> dict:
     
     # Run the model
     with autocast("cuda"):
-        image = model(prompt,height=height,width=width,num_inference_steps=num_inference_steps,guidance_scale=guidance_scale,generator=generator).images[0]
+        image = model(prompt,negative_prompt=negative_prompt,height=height,width=width,num_inference_steps=num_inference_steps,guidance_scale=guidance_scale,generator=generator).images[0]
     
     buffered = BytesIO()
     image.save(buffered,format="JPEG")
